@@ -1,6 +1,7 @@
 package com.company.AppRest.service;
 
 import com.company.AppRest.entity.model.Pessoa;
+import com.company.AppRest.enums.EstadoUsuario;
 import com.company.AppRest.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -21,6 +23,9 @@ public class PessoaService implements IPessoaService{
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Cacheable("pessoas")
@@ -60,6 +65,10 @@ public class PessoaService implements IPessoaService{
     @Override
     @CacheEvict(value = "pessoas", allEntries = true)
     public Pessoa save(Pessoa pessoa) {
+
+        pessoa.getUsuario().setPassword(passwordEncoder.encode(pessoa.getUsuario().getPassword()));
+        pessoa.getUsuario().setEstadoUsuario(EstadoUsuario.ATIVDADO);
+
         return pessoaRepository.save(pessoa);
     }
 

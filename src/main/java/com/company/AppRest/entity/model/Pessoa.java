@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -34,5 +35,9 @@ public class Pessoa {
 
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
+
+    @NotNull
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Usuario usuario;
 
 }

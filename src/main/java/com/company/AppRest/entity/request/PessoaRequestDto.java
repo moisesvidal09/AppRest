@@ -1,5 +1,6 @@
 package com.company.AppRest.entity.request;
 
+import com.company.AppRest.entity.model.Usuario;
 import com.company.AppRest.enums.Sexo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -34,5 +35,7 @@ public class PessoaRequestDto {
     private Date dataNascimento;
 
     private Sexo sexo;
+
+    private UserRequestDto usuario;
 
 }
