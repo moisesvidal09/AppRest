@@ -1,25 +1,30 @@
 package com.company.AppRest.entity.request;
 
-import com.company.AppRest.entity.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDto {
+@Builder
+public class EmpresaRequestDto {
 
     @NotBlank
-    private String username;
+    private String nome;
 
     @NotBlank
-    private String password;
+    private String segmento;
 
-    private Set<Role> roles;
+    @NotBlank
+    private String cnpj;
+
+    @NotNull
+    private Set<AcaoRequestDto> acoes;
+
 }

@@ -18,6 +18,7 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "usuario_id")
     private Long id;
 
     private String username;
@@ -27,7 +28,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private EstadoUsuario estadoUsuario;
 
-    @ManyToMany(cascade = CascadeType.DETACH)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "usuario_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
     private Set<Role> roles;
 

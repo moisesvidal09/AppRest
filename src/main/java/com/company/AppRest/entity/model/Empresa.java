@@ -4,29 +4,33 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
-@Proxy(lazy = false)
 @Data
-@Builder
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class Role implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    public static final String USER = "USER";
-    public static final String ADMIN = "ADMIN";
+public class Empresa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
     private Long id;
 
+    @NotBlank
     private String nome;
 
+    @NotBlank
+    private String segmento;
+
+    @NotBlank
+    private String cnpj;
+
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.PERSIST})
+    @JoinColumn(name = "empresa_id")
+    private Set<Acao> acoes;
 
 }

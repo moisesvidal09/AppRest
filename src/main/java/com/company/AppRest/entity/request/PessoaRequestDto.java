@@ -1,5 +1,6 @@
 package com.company.AppRest.entity.request;
 
+import com.company.AppRest.entity.model.Role;
 import com.company.AppRest.entity.model.Usuario;
 import com.company.AppRest.enums.Sexo;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Builder
