@@ -1,13 +1,15 @@
 package com.company.AppRest.repository;
 
 import com.company.AppRest.entity.model.Pessoa;
-import com.company.AppRest.entity.model.Usuario;
+import com.company.AppRest.entity.model.PessoaAcao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
+import java.util.List;
 
-    Pessoa findByUsuario(Usuario usuario);
+@Repository
+public interface PessoaAcaoRepository extends JpaRepository<PessoaAcao, Long> {
+
+    List<PessoaAcao> findByPessoa(Pessoa pessoa);
 
 }
