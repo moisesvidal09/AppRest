@@ -2,6 +2,7 @@ package com.company.AppRest.entity.response;
 
 import com.company.AppRest.entity.model.Acao;
 import com.company.AppRest.entity.model.Pessoa;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,17 +18,18 @@ import java.util.Date;
 @Builder
 public class PessoaAcaoResponseDto {
 
-    private Long id;
-
+    
     private AcaoResponseDto acao;
 
-    private Integer quatidade;
+    private Integer quantidade;
 
     private BigDecimal valorCompra;
 
     private BigDecimal valorVenda;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date dataCompra;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date dataVenda;
 }
