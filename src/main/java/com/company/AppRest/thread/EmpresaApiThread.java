@@ -39,7 +39,12 @@ public class EmpresaApiThread extends Thread{
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<EmpresaApi>>() {});
 
-        List<EmpresaApi> empresaApiList = monoEmpresaApiList.block();
+        List<EmpresaApi> empresaApiList = monoEmpresaApiList.block()
+                                                .parallelStream()
+                                                .filter(empresaApi -> !"".equals(empresaApi.getTx_cnpj()) && !"".equals(empresaApi.getNm_empresa())
+                                                        && !"".equals(empresaApi.getCd_acao())
+                                                        && !"".equals(empresaApi.getSegmento()))
+                                                .collect(Collectors.toList());
 
         if(empresaApiList != null) {
 
