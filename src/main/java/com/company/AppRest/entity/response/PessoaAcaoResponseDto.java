@@ -18,7 +18,7 @@ import java.util.Date;
 @Builder
 public class PessoaAcaoResponseDto {
 
-    
+
     private AcaoResponseDto acao;
 
     private Integer quantidade;
