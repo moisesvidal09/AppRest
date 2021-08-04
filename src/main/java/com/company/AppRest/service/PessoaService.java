@@ -1,8 +1,10 @@
 package com.company.AppRest.service;
 
 import com.company.AppRest.entity.model.Pessoa;
+import com.company.AppRest.entity.model.Role;
 import com.company.AppRest.enums.EstadoUsuario;
 import com.company.AppRest.repository.PessoaRepository;
+import com.company.AppRest.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +30,9 @@ public class PessoaService implements IPessoaService{
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     @Cacheable("pessoas")
@@ -68,6 +75,12 @@ public class PessoaService implements IPessoaService{
 
         pessoa.getUsuario().setPassword(passwordEncoder.encode(pessoa.getUsuario().getPassword()));
         pessoa.getUsuario().setEstadoUsuario(EstadoUsuario.ATIVDADO);
+
+        Set<Role> roles = new HashSet<>();
+
+        roles.add(roleRepository.findByNome("USER"));
+
+        pessoa.getUsuario().setRoles(roles);
 
         return pessoaRepository.save(pessoa);
     }
