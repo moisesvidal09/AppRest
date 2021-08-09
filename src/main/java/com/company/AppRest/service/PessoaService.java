@@ -3,8 +3,10 @@ package com.company.AppRest.service;
 import com.company.AppRest.entity.model.Pessoa;
 import com.company.AppRest.entity.model.Role;
 import com.company.AppRest.enums.EstadoUsuario;
+import com.company.AppRest.exception.UsuarioException;
 import com.company.AppRest.repository.PessoaRepository;
 import com.company.AppRest.repository.RoleRepository;
+import com.company.AppRest.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -33,6 +36,9 @@ public class PessoaService implements IPessoaService{
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Override
     @Cacheable("pessoas")
@@ -71,10 +77,13 @@ public class PessoaService implements IPessoaService{
 
     @Override
     @CacheEvict(value = "pessoas", allEntries = true)
-    public Pessoa save(Pessoa pessoa) {
+    public Pessoa save(Pessoa pessoa) throws UsuarioException {
+
+        if(usuarioRepository.findByUsername(pessoa.getUsuario().getUsername()) != null)
+            throw new UsuarioException("E-mail informado já cadastrado !!!");
 
         pessoa.getUsuario().setPassword(passwordEncoder.encode(pessoa.getUsuario().getPassword()));
-        pessoa.getUsuario().setEstadoUsuario(EstadoUsuario.ATIVDADO);
+        pessoa.getUsuario().setEstadoUsuario(EstadoUsuario.DESATIVADO);
 
         Set<Role> roles = new HashSet<>();
 

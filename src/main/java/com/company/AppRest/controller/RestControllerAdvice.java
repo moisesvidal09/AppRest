@@ -1,6 +1,7 @@
 package com.company.AppRest.controller;
 
 import com.company.AppRest.entity.response.ErrorMessage;
+import com.company.AppRest.exception.UsuarioException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,6 +24,12 @@ public class RestControllerAdvice {
         String message = "Internal Server Error";
         return buildErrorMessageResponseEntity(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }*/
+
+    @ExceptionHandler(UsuarioException.class)
+    public ResponseEntity<ErrorMessage> handleUsuarioException(Exception exception){
+        String message = exception.getMessage();
+        return buildErrorMessageResponseEntity(message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(Exception exception){

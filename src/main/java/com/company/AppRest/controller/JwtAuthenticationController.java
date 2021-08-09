@@ -4,9 +4,16 @@ package com.company.AppRest.controller;
 import com.company.AppRest.entity.model.Usuario;
 import com.company.AppRest.entity.request.UserRequestDto;
 import com.company.AppRest.entity.response.JwtResponse;
+import com.company.AppRest.enums.EstadoUsuario;
+import com.company.AppRest.exception.UsuarioException;
+import com.company.AppRest.repository.UsuarioRepository;
+import com.company.AppRest.service.PessoaAcaoService;
+import com.company.AppRest.service.PessoaService;
 import com.company.AppRest.service.UserDetailsServiceImpl;
 import com.company.AppRest.util.JwtTokenUtil;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -29,17 +36,37 @@ public class JwtAuthenticationController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    @PostMapping(value = "/login")
+
+    @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid UserRequestDto authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
+        final Usuario usuario = usuarioRepository.findByUsername(userDetails.getUsername());
+
+        if(EstadoUsuario.DESATIVADO.equals(usuario.getEstadoUsuario()))
+            throw new UsuarioException("Usuário " + usuario.getUsername() + " Inativo ou E-mail não confirmado");
+
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new JwtResponse(token));
+    }
+
+    @PostMapping("/ativar/{token}")
+    public ResponseEntity<String> ativarUsuario(@PathVariable String token){
+
+        Usuario usuario = usuarioRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(token));
+
+        usuario.setEstadoUsuario(EstadoUsuario.ATIVDADO);
+
+        usuarioRepository.save(usuario);
+
+        return new ResponseEntity<>("Usuário Ativado com sucesso !!!", HttpStatus.OK);
     }
 
     private void authenticate(String username, String password) throws Exception {

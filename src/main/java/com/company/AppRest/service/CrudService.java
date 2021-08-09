@@ -1,5 +1,6 @@
 package com.company.AppRest.service;
 
+import com.company.AppRest.exception.UsuarioException;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public interface CrudService <T extends Object> {
 
     T update(T entity);
 
-    T save(T entity);
+    T save(T entity) throws UsuarioException;
 
 }

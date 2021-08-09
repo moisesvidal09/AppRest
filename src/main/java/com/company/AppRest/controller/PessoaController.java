@@ -3,6 +3,7 @@ package com.company.AppRest.controller;
 import com.company.AppRest.entity.model.Pessoa;
 import com.company.AppRest.entity.request.PessoaRequestDto;
 import com.company.AppRest.entity.response.PessoaResponseDto;
+import com.company.AppRest.exception.UsuarioException;
 import com.company.AppRest.service.PessoaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class PessoaController implements IPessoaController{
 
     @Override
     @PostMapping
-    public ResponseEntity<PessoaResponseDto> create(@RequestBody @Valid PessoaRequestDto pessoaRequestDto) {
+    public ResponseEntity<PessoaResponseDto> create(@RequestBody @Valid PessoaRequestDto pessoaRequestDto) throws UsuarioException {
 
         Pessoa pessoa = pessoaService.save(mapper.map(pessoaRequestDto, Pessoa.class));
 
@@ -58,7 +59,7 @@ public class PessoaController implements IPessoaController{
     @PatchMapping
     public ResponseEntity<PessoaResponseDto> update(@RequestBody @Valid PessoaRequestDto pessoaRequestDto) {
 
-        Pessoa pessoa = pessoaService.save(mapper.map(pessoaRequestDto, Pessoa.class));
+        Pessoa pessoa = pessoaService.update(mapper.map(pessoaRequestDto, Pessoa.class));
 
         PessoaResponseDto pessoaResponseDto = mapper.map(pessoa, PessoaResponseDto.class);
 
