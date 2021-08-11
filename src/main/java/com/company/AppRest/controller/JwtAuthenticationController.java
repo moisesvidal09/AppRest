@@ -43,14 +43,14 @@ public class JwtAuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid UserRequestDto authenticationRequest) throws Exception {
 
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
-        final Usuario usuario = usuarioRepository.findByUsername(userDetails.getUsername());
+        final EstadoUsuario estadoUsuario = usuarioRepository.findByUsername(userDetails.getUsername()).getEstadoUsuario();
 
-        if(EstadoUsuario.DESATIVADO.equals(usuario.getEstadoUsuario()))
-            throw new UsuarioException("Usuário " + usuario.getUsername() + " Inativo ou E-mail não confirmado");
+        if(EstadoUsuario.DESATIVADO.equals(estadoUsuario))
+            throw new UsuarioException("Usuário inativo ou E-mail não confirmado");
+
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         final String token = jwtTokenUtil.generateToken(userDetails);
 
