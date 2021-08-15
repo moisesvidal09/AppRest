@@ -24,6 +24,7 @@ import java.util.Set;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@Transactional
 public class PessoaServiceTest {
 
     @Autowired
