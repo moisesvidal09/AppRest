@@ -16,7 +16,7 @@ pipeline {
         NEXUS_ADDRESS = 'http://172.18.0.1:8081'
         SONAR_PROPERTIES = 'ci-cd/project.properties'
         JENKINS_SONAR_INSTALATION = 'Sonarqube'
-        GIT_URL='https://github.com/moisesvidal09/AppRest.git'
+        GIT_URL='github.com/moisesvidal09/AppRest.git'
     }
 
     stages {
@@ -64,7 +64,7 @@ pipeline {
                     sh "git tag ${pomVersion}"
                     String gitRepo = "${env.GIT_URL}"
                      withCredentials([usernamePassword(credentialsId: 'git-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} HEAD:main"
+                        sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} HEAD:main ${pomVersion}"
                     }
 
                 }
