@@ -16,13 +16,13 @@ pipeline {
         NEXUS_ADDRESS = '172.18.0.1:8081'
         SONAR_PROPERTIES = 'ci-cd/project.properties'
         JENKINS_SONAR_INSTALATION = 'Sonarqube'
-        GIT_URL='https://github.com/moisesvidal09/AppRest.git'
+        GIT_URL='github.com/moisesvidal09/AppRest.git'
     }
 
     stages {
         stage('Build and Test') {
             steps {
-                sh "mvn clean test"
+                sh "mvn clean test "//-Dtest='${UNIT_TESTS_PATH}'
 
                 step([$class: 'JacocoPublisher', execPattern: 'target/jacoco.exec', exclusionPattern: '**/Main.class'])
 
@@ -57,14 +57,14 @@ pipeline {
             steps {
                 sh "git config --global user.email 'moisesvidal09@gmail.com'"
                 sh "git config --global user.name 'moisesvidal09'"
-                sh "git checkout -f origin/master"
+                sh "git checkout -f origin/main"
                 sh "git merge --ff ${env.GIT_COMMIT}"
                 script {
                     String pomVersion =  readMavenPom().getVersion()
                     sh "git tag ${pomVersion}"
                     String gitRepo = "${env.GIT_URL}"
                      withCredentials([usernamePassword(credentialsId: 'git-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} HEAD:master"
+                        sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} HEAD:main"
                     }
 
                 }
