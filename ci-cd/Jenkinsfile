@@ -61,9 +61,9 @@ pipeline {
                 sh "git merge --ff ${env.GIT_COMMIT}"
                 script {
                     String pomVersion =  readMavenPom().getVersion()
-                    sh "git tag ${pomVersion}"
                     String gitRepo = "${env.GIT_URL}"
                      withCredentials([usernamePassword(credentialsId: 'git-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh "git tag ${pomVersion}"
                         sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} HEAD:main ${pomVersion}"
                     }
 
@@ -76,8 +76,11 @@ pipeline {
                 branch "main"
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', passwordVariable: 'NEXUS_PASSWORD', usernameVariable: 'NEXUS_USERNAME')]) {
-                    sh "mvn deploy -Dnexus.address=http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS} -DaltDeploymentRepository=releaseRepository::default::http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS}/repository/maven-releases -DskipTests"
+                script {
+                    String pomVersion =  readMavenPom().getVersion()
+                    withCredentials([usernamePassword(credentialsId: 'nexus-credentials', passwordVariable: 'NEXUS_PASSWORD', usernameVariable: 'NEXUS_USERNAME')]) {
+                        sh "mvn deploy -Dnexus.address=http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS} -DaltDeploymentRepository=releaseRepository::default::http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS}/repository/maven-releases -DskipTests -Dversion=${pomVersion}"
+                    }
                 }
             }
         }
