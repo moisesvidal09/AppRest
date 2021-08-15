@@ -13,7 +13,7 @@ pipeline {
     environment {
         UNIT_TESTS_PATH = 'com.company.AppRest.*Test'
         SONAR_ADDRESS = 'http://172.18.0.1:9000'
-        NEXUS_ADDRESS = 'http://172.18.0.1:8081'
+        NEXUS_ADDRESS = '172.18.0.1:8081'
         SONAR_PROPERTIES = 'ci-cd/project.properties'
         JENKINS_SONAR_INSTALATION = 'Sonarqube'
         GIT_URL='https://github.com/moisesvidal09/AppRest.git'
