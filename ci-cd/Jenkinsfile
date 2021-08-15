@@ -62,8 +62,9 @@ pipeline {
                 script {
                     String pomVersion =  readMavenPom().getVersion()
                     String gitRepo = "${env.GIT_URL}"
+                    sh "git tag ${pomVersion}"
                      withCredentials([usernamePassword(credentialsId: 'git-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh "git tag ${pomVersion}"
+                        sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} :refs/tags/${pomVersion}"
                         sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} HEAD:main ${pomVersion}"
                     }
 
@@ -79,7 +80,7 @@ pipeline {
                 script {
                     String pomVersion =  readMavenPom().getVersion()
                     withCredentials([usernamePassword(credentialsId: 'nexus-credentials', passwordVariable: 'NEXUS_PASSWORD', usernameVariable: 'NEXUS_USERNAME')]) {
-                        sh "mvn deploy -Dnexus.address=http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS} -DaltDeploymentRepository=releaseRepository::default::http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS}/repository/maven-releases -DskipTests -Dversion=${pomVersion}"
+                        sh "mvn deploy -Dnexus.address=http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS} -DaltDeploymentRepository=snapshotRepository::default::http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS}/repository/maven-snapshots -DskipTests -Dversion=${pomVersion}"
                     }
                 }
             }
