@@ -1,0 +1,91 @@
+pipeline {
+    agent {
+        dockerfile {
+            dir 'ci-cd'
+            args '-v /root/.m2:/root/.m2'
+        }
+    }
+
+    options {
+        disableConcurrentBuilds()
+    }
+
+    environment {
+        UNIT_TESTS_PATH = 'com.company.AppRest.*Test'
+        SONAR_ADDRESS = 'http://host.docker.internal:9000'
+        NEXUS_ADDRESS = 'http://host.docker.internal:8081'
+        SONAR_PROPERTIES = 'ci-cd/project.properties'
+        JENKINS_SONAR_INSTALATION = 'Sonarqube'
+        GIT_URL='https://github.com/moisesvidal09/AppRest.git'
+    }
+
+    stages {
+        stage('Build and Test') {
+            steps {
+                sh "mvn clean test"
+
+                step([$class: 'JacocoPublisher', execPattern: 'target/jacoco.exec', exclusionPattern: '**/Main.class'])
+
+                withSonarQubeEnv("${JENKINS_SONAR_INSTALATION}") {
+                    sh "sonar-scanner -Dsonar.host.url=${SONAR_ADDRESS} -Dproject.settings=${SONAR_PROPERTIES}"
+                }
+            }
+        }
+
+        stage('Merge to develop') {
+            when {
+                branch "feature-*"
+            }
+            steps {
+                sh "git config --global user.email 'moisesvidal09@gmail.com'"
+                sh "git config --global user.name 'moisesvidal09'"
+                sh "git checkout -f origin/develop"
+                sh "git merge --ff ${env.GIT_COMMIT}"
+                script {
+                    String gitRepo = "${env.GIT_URL}"
+                    withCredentials([usernamePassword(credentialsId: 'git-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} HEAD:develop"
+                    }
+                }
+            }
+        }
+
+        stage('Merge to master') {
+            when {
+                branch "develop"
+            }
+            steps {
+                sh "git config --global user.email 'moisesvidal09@gmail.com'"
+                sh "git config --global user.name 'moisesvidal09'"
+                sh "git checkout -f origin/master"
+                sh "git merge --ff ${env.GIT_COMMIT}"
+                script {
+                    String pomVersion =  readMavenPom().getVersion()
+                    sh "git tag ${pomVersion}"
+                    String gitRepo = "${env.GIT_URL}"
+                     withCredentials([usernamePassword(credentialsId: 'git-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh "git -c http.sslVerify=false push https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitRepo} HEAD:master"
+                    }
+
+                }
+            }
+        }
+
+        stage('Delivery to Nexus') {
+            when {
+                branch "main"
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', passwordVariable: 'NEXUS_PASSWORD', usernameVariable: 'NEXUS_USERNAME')]) {
+                    sh "mvn deploy -Dnexus.address=http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS} -DaltDeploymentRepository=releaseRepository::default::http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS}/repository/maven-releases -DskipTests"
+                }
+            }
+        }
+    }
+
+    post {
+        cleanup {
+            cleanWs()
+        }
+    }
+}
