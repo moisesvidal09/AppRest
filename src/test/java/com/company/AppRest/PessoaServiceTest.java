@@ -5,6 +5,7 @@ import com.company.AppRest.entity.model.Role;
 import com.company.AppRest.entity.model.Usuario;
 import com.company.AppRest.enums.EstadoUsuario;
 import com.company.AppRest.enums.Sexo;
+import com.company.AppRest.exception.UsuarioException;
 import com.company.AppRest.repository.RoleRepository;
 import com.company.AppRest.service.PessoaService;
 import org.junit.Assert;
@@ -32,7 +33,7 @@ public class PessoaServiceTest {
     private RoleRepository roleRepository;
 
     @Test
-    public void save(){
+    public void save() throws UsuarioException {
 
         Set<Role> roles = new HashSet<>();
 

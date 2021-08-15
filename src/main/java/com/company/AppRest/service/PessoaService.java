@@ -40,6 +40,9 @@ public class PessoaService implements IPessoaService{
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
     @Override
     @Cacheable("pessoas")
     public List<Pessoa> list(Pageable pageable) {
@@ -81,6 +84,8 @@ public class PessoaService implements IPessoaService{
 
         if(usuarioRepository.findByUsername(pessoa.getUsuario().getUsername()) != null)
             throw new UsuarioException("E-mail informado já cadastrado !!!");
+
+        userDetailsService.validateSenha(pessoa.getUsuario().getPassword());
 
         pessoa.getUsuario().setPassword(passwordEncoder.encode(pessoa.getUsuario().getPassword()));
         pessoa.getUsuario().setEstadoUsuario(EstadoUsuario.DESATIVADO);

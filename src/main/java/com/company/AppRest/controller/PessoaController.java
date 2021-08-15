@@ -5,6 +5,7 @@ import com.company.AppRest.entity.request.PessoaRequestDto;
 import com.company.AppRest.entity.response.PessoaResponseDto;
 import com.company.AppRest.exception.UsuarioException;
 import com.company.AppRest.service.PessoaService;
+import com.company.AppRest.service.UserDetailsServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -33,12 +34,16 @@ public class PessoaController implements IPessoaController{
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
 
     @Override
     @PostMapping
     public ResponseEntity<PessoaResponseDto> create(@RequestBody @Valid PessoaRequestDto pessoaRequestDto) throws UsuarioException {
 
         Pessoa pessoa = pessoaService.save(mapper.map(pessoaRequestDto, Pessoa.class));
+
+        userDetailsService.sendConfirmEmail(pessoa.getUsuario());
 
         PessoaResponseDto pessoaResponseDto = mapper.map(pessoa, PessoaResponseDto.class);
 
