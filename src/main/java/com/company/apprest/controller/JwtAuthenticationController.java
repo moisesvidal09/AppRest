@@ -38,7 +38,7 @@ public class JwtAuthenticationController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid UserRequestDto authenticationRequest) throws Exception {
+    public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody @Valid UserRequestDto authenticationRequest) throws Exception {
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
@@ -51,7 +51,7 @@ public class JwtAuthenticationController {
 
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtResponse(token));
+        return new ResponseEntity<>(new JwtResponse(token), HttpStatus.OK);
     }
 
     @PostMapping("/ativar/{token}")
@@ -66,13 +66,13 @@ public class JwtAuthenticationController {
         return new ResponseEntity<>("Usuário Ativado com sucesso !!!", HttpStatus.OK);
     }
 
-    private void authenticate(String username, String password) throws Exception {
+    private void authenticate(String username, String password) throws UsuarioException {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
+            throw new UsuarioException("Usuário Desativado");
         } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            throw new UsuarioException("Usuário ou senha errado");
         }
     }
 }

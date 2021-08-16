@@ -48,13 +48,11 @@ public class EmpresaApiThread extends Thread{
                     .collect(Collectors.toList());
 
             empresas.parallelStream()
-                    .forEach(empresa -> {
-                        empresaService.save(empresa);
-                    });
+                    .forEach(empresa -> empresaService.save(empresa));
 
         } else {
 
-            System.err.println("Atenção !!!!! \n Não foi possível obter dados da API ");
+            System.out.println("Atenção !!!!! \n Não foi possível obter dados da API ");
 
         }
 
@@ -72,11 +70,9 @@ public class EmpresaApiThread extends Thread{
         List<String> codigoAcoes = Arrays.asList(empresaApi.getCd_acao().split(","));
 
         Set<Acao> acoes = codigoAcoes.parallelStream()
-                                        .map(codigoAcao -> {
-                                            return Acao.builder()
-                                                    .codigoAcao(codigoAcao)
-                                                    .build();
-                                        }).collect(Collectors.toSet());
+                                        .map(codigoAcao -> Acao.builder()
+                                                            .codigoAcao(codigoAcao)
+                                                            .build()).collect(Collectors.toSet());
 
         empresa.setAcoes(acoes);
 

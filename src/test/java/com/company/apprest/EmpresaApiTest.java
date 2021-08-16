@@ -51,9 +51,7 @@ public class EmpresaApiTest {
                     .collect(Collectors.toList());
 
             empresas.parallelStream()
-                    .forEach(empresa -> {
-                        empresaService.save(empresa);
-                    });
+                    .forEach(empresa -> empresaService.save(empresa));
 
         Assert.assertFalse(empresas.isEmpty());
     }
@@ -69,11 +67,9 @@ public class EmpresaApiTest {
         List<String> codigoAcoes = Arrays.asList(empresaApi.getCd_acao().split(","));
 
         Set<Acao> acoes = codigoAcoes.parallelStream()
-                                     .map(codigoAcao -> {
-                                         return Acao.builder()
+                                     .map(codigoAcao -> Acao.builder()
                                                          .codigoAcao(codigoAcao.trim())
-                                                         .build();
-                                     })
+                                                         .build())
                                      .collect(Collectors.toSet());
 
         empresa.setAcoes(acoes);

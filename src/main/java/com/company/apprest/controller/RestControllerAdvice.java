@@ -19,11 +19,11 @@ public class RestControllerAdvice {
         return buildErrorMessageResponseEntity(message, HttpStatus.NOT_FOUND);
     }
 
-    /*@ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handleException(Exception exception){
         String message = "Internal Server Error";
         return buildErrorMessageResponseEntity(message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }*/
+    }
 
     @ExceptionHandler(UsuarioException.class)
     public ResponseEntity<ErrorMessage> handleUsuarioException(Exception exception){
