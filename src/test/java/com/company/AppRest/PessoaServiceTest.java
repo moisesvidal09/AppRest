@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -24,7 +25,7 @@ import java.util.Set;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@Transactional
+@ActiveProfiles("test")
 public class PessoaServiceTest {
 
     @Autowired
@@ -42,7 +43,7 @@ public class PessoaServiceTest {
 
         Usuario usuario = Usuario.builder()
                                  .username("teste")
-                                  .password("1q23")
+                                  .password("sdkiflbasdlfkasd#")
                                 .estadoUsuario(EstadoUsuario.ATIVDADO)
                                 .roles(roles)
                                 .build();

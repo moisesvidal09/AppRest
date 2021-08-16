@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@Transactional
+@ActiveProfiles("test")
 public class EmpresaApiTest {
 
     @Autowired
