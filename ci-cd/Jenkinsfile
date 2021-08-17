@@ -24,7 +24,8 @@ pipeline {
             steps {
                 sh "mvn clean test -Dtest='${UNIT_TESTS_PATH}'"
 
-                step([$class: 'JacocoPublisher', execPattern: 'target/jacoco.exec', exclusionPattern: '**/Main.class'])
+
+                step([$class: 'JacocoPublisher', execPattern: 'target/*.exec', sourcePattern: 'src/main/java', exclusionPattern: '**/Main.class'])
 
                 withSonarQubeEnv("${JENKINS_SONAR_INSTALATION}") {
                     sh "sonar-scanner -Dsonar.host.url=${SONAR_ADDRESS} -Dproject.settings=${SONAR_PROPERTIES}"

@@ -1,4 +1,4 @@
-package com.company.apprest;
+package com.company.apprest.api;
 
 import com.company.apprest.entity.api.EmpresaApi;
 import com.company.apprest.entity.model.Acao;

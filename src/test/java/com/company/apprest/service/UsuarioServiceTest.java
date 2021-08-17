@@ -1,8 +1,7 @@
-package com.company.apprest;
+package com.company.apprest.service;
 
 
 import com.company.apprest.exception.UsuarioException;
-import com.company.apprest.service.UserDetailsServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,5 @@ public class UsuarioServiceTest {
         if(!contemCaracterEspecial) throw new UsuarioException("Senha deve possuir caracter especial como: # $ % @ &");
 
     }
-
-
 
 }
