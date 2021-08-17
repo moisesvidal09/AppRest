@@ -22,10 +22,10 @@ pipeline {
     stages {
         stage('Build and Test') {
             steps {
-                sh "mvn clean test -Dtest='${UNIT_TESTS_PATH}'"
+                sh "mvn clean test"
 
 
-                step([$class: 'JacocoPublisher', execPattern: 'target/*.exec', sourcePattern: 'src/main/java', exclusionPattern: '**/Main.class'])
+                step([$class: 'JacocoPublisher', execPattern: 'target/jacoco.exec', sourcePattern: 'src/main/java', exclusionPattern: '**/Main.class'])
 
                 withSonarQubeEnv("${JENKINS_SONAR_INSTALATION}") {
                     sh "sonar-scanner -Dsonar.host.url=${SONAR_ADDRESS} -Dproject.settings=${SONAR_PROPERTIES}"
