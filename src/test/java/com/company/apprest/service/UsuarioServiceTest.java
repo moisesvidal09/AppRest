@@ -1,4 +1,4 @@
-package com.company.apprest;
+package com.company.apprest.service;
 
 
 import com.company.apprest.exception.UsuarioException;
@@ -10,6 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +41,19 @@ public class UsuarioServiceTest {
         //se não tiver caracteres especiais
         if(!contemCaracterEspecial) throw new UsuarioException("Senha deve possuir caracter especial como: # $ % @ &");
 
+    }
+
+    @Test
+    public void tedfasfdj(){
+
+        List<String> myList = new ArrayList();
+        Optional<String> optList = myList.stream().findAny();
+        System.out.println(optList);
+        try {
+
+        }catch (Throwable e){
+
+        }
     }
 
 
