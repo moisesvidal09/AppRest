@@ -7,6 +7,8 @@ import com.company.apprest.exception.UsuarioException;
 import com.company.apprest.repository.PessoaRepository;
 import com.company.apprest.repository.RoleRepository;
 import com.company.apprest.repository.UsuarioRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -39,6 +41,8 @@ public class PessoaService implements IPessoaService{
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    private static Logger logger = LoggerFactory.getLogger(PessoaService.class);
 
     @Override
     @Cacheable("pessoas")
@@ -79,8 +83,10 @@ public class PessoaService implements IPessoaService{
     @CacheEvict(value = "pessoas", allEntries = true)
     public Pessoa save(Pessoa pessoa) throws UsuarioException {
 
-        if(usuarioRepository.findByUsername(pessoa.getUsuario().getUsername()) != null)
+        if(usuarioRepository.findByUsername(pessoa.getUsuario().getUsername()) != null) {
+            logger.error("E-mail: "+pessoa.getUsuario().getUsername()+" já possui cadastro !!!");
             throw new UsuarioException("E-mail informado já cadastrado !!!");
+        }
 
         userDetailsService.validateSenha(pessoa.getUsuario().getPassword());
 

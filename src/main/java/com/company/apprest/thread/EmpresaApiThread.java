@@ -4,6 +4,8 @@ import com.company.apprest.entity.api.EmpresaApi;
 import com.company.apprest.entity.model.Acao;
 import com.company.apprest.entity.model.Empresa;
 import com.company.apprest.service.EmpresaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
@@ -22,6 +24,8 @@ public class EmpresaApiThread extends Thread{
 
     @Autowired
     private EmpresaService empresaService;
+
+    private static Logger logger = LoggerFactory.getLogger(EmpresaApiThread.class);
 
     @Override
     public void run(){
@@ -52,7 +56,7 @@ public class EmpresaApiThread extends Thread{
 
         } else {
 
-            System.out.println("Atenção !!!!! \n Não foi possível obter dados da API ");
+            logger.error("Atenção !!!!! \n Não foi possível obter dados da API ");
 
         }
 
