@@ -15,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +23,6 @@ import java.util.Set;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@Transactional
 public class EmpresaServiceTest {
 
     @Autowired
@@ -44,7 +42,7 @@ public class EmpresaServiceTest {
         acoes.add(acao);
 
         Empresa empresa = Empresa.builder()
-                                 .id(idEmpresa)
+                                 .id(this.idEmpresa)
                                  .nome("Empresa Test")
                                  .cnpj("18.523.395/0001-72")
                                  .segmento("Vendas")

@@ -1,41 +1,21 @@
 package com.company.apprest.api;
 
-import com.company.apprest.entity.api.EmpresaApi;
-import com.company.apprest.entity.model.Acao;
-import com.company.apprest.entity.model.Empresa;
-import com.company.apprest.service.EmpresaService;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-@SpringBootTest
-@RunWith(SpringRunner.class)
-@ActiveProfiles("test")
+//@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@ActiveProfiles("test")
 public class EmpresaApiTest {
 
-    @Autowired
-    private EmpresaService empresaService;
+//    @Autowired
+//    private EmpresaService empresaService;
 
-    @Test
+    /*@Test
     public void getDataApiTest(){
 
         WebClient.Builder webClientBuilder = WebClient.builder();
 
         Mono<List<EmpresaApi>> monoEmpresaApiList = webClientBuilder.build()
                 .get()
-                .uri("https://api-cotacao-b3.labdo.it/api/empresa")
+                .uri("https://api-cotacaocls-b3.labdo.it/api/empresa")
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<EmpresaApi>>() {});
 
@@ -75,6 +55,6 @@ public class EmpresaApiTest {
         empresa.setAcoes(acoes);
 
         return empresa;
-    }
+    }*/
 
 }

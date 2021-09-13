@@ -29,7 +29,7 @@ public class Empresa {
     @NotBlank
     private String cnpj;
 
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.PERSIST})
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "empresa_id")
     private Set<Acao> acoes;
 
