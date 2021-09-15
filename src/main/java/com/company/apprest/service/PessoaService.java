@@ -2,11 +2,13 @@ package com.company.apprest.service;
 
 import com.company.apprest.entity.model.Pessoa;
 import com.company.apprest.entity.model.Role;
+import com.company.apprest.entity.model.Usuario;
 import com.company.apprest.enums.EstadoUsuario;
 import com.company.apprest.exception.UsuarioException;
 import com.company.apprest.repository.PessoaRepository;
 import com.company.apprest.repository.RoleRepository;
 import com.company.apprest.repository.UsuarioRepository;
+import com.company.apprest.util.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +44,9 @@ public class PessoaService implements IPessoaService{
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
 
     private static Logger logger = LoggerFactory.getLogger(PessoaService.class);
 
@@ -109,5 +115,17 @@ public class PessoaService implements IPessoaService{
         return pessoas.parallelStream()
                       .map(this::update)
                       .collect(Collectors.toList());
+    }
+
+    @Override
+    public Pessoa getPessoaByToken(String token) {
+
+        token = token.replace("Bearer", "").trim();
+
+        UserDetails user = userDetailsService.loadUserByUsername(jwtTokenUtil.getUsernameFromToken(token));
+
+        Usuario usuario = usuarioRepository.findByUsername(user.getUsername());
+
+        return  pessoaRepository.findByUsuario(usuario);
     }
 }

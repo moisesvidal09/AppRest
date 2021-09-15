@@ -10,4 +10,6 @@ public interface IPessoaService extends CrudService<Pessoa>{
 
     List<Pessoa> updateList(List<Pessoa> pessoas);
 
+    Pessoa getPessoaByToken(String token);
+
 }

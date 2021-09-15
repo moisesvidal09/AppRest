@@ -2,6 +2,7 @@ package com.company.apprest.controller;
 
 import com.company.apprest.entity.model.PessoaAcao;
 import com.company.apprest.entity.request.PessoaAcaoRequestDto;
+import com.company.apprest.entity.response.PessoaAcaoPrecoMedioResponseDto;
 import com.company.apprest.entity.response.PessoaAcaoResponseDto;
 import com.company.apprest.service.PessoaAcaoService;
 import org.modelmapper.ModelMapper;
@@ -87,12 +88,17 @@ public class PessoaAcaoController implements IPessoaAcaoController{
     @Override
     public ResponseEntity<List<PessoaAcaoResponseDto>> getAcoesByToken(@RequestHeader (name="Authorization") String token){
 
-        List<PessoaAcao> acoes = pessoaAcaoService.getAcoesByToken(token.replace("Bearer", "").trim());
+        List<PessoaAcao> acoes = pessoaAcaoService.getAcoesByToken(token);
 
         List<PessoaAcaoResponseDto> pessoaAcaoResponseDtoList = acoes.parallelStream()
                                                                      .map(p -> mapper.map(p, PessoaAcaoResponseDto.class))
                                                                      .collect(Collectors.toList());
 
         return new ResponseEntity<>(pessoaAcaoResponseDtoList, HttpStatus.OK);
+    }
+
+    @GetMapping("preco-medio/{id}")
+    public ResponseEntity<PessoaAcaoPrecoMedioResponseDto> getPrecoMedioAcao(@RequestHeader (name = "Authorization") String token, @PathVariable("id") Long acao_id) throws Exception {
+        return new ResponseEntity<>(pessoaAcaoService.getPrecoMedioAcao(token, acao_id), HttpStatus.OK);
     }
 }
