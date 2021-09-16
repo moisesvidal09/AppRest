@@ -13,7 +13,7 @@ pipeline {
     environment {
         UNIT_TESTS_PATH = 'com.company.apprest.*Test'
         SONAR_ADDRESS = 'http://172.18.0.1:9000'
-        NEXUS_ADDRESS = '172.18.0.1:8081'
+        NEXUS_ADDRESS = '172.18.0.1:8081/repository/maven-releases/'
         SONAR_PROPERTIES = 'ci-cd/project.properties'
         JENKINS_SONAR_INSTALATION = 'Sonarqube'
         GIT_URL='github.com/moisesvidal09/AppRest.git'
@@ -81,7 +81,7 @@ pipeline {
                 script {
                     String pomVersion =  readMavenPom().getVersion()
                     withCredentials([usernamePassword(credentialsId: 'nexus-credentials', passwordVariable: 'NEXUS_PASSWORD', usernameVariable: 'NEXUS_USERNAME')]) {
-                        sh "mvn deploy -Dnexus.address=http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS} -DaltDeploymentRepository=snapshotRepository::default::http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS}/repository/maven-snapshots -DskipTests -Dversion=${pomVersion}"
+                        sh "mvn deploy -Dmaven.test.skip -Dnexus.address=http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS} -DaltDeploymentRepository=releaseRepository::default::http://${NEXUS_USERNAME}:${NEXUS_PASSWORD}@${env.NEXUS_ADDRESS}/repository/maven-releases -DrepositoryId=apprest -Dpackaging=jar -DgeneratePom=true -DgroupId=com.company -DartifactId=AppRest -Dversion=${pomVersion}"
                     }
                 }
             }
