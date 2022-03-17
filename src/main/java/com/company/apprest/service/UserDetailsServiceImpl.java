@@ -23,14 +23,17 @@ import java.util.regex.Pattern;
 @Service
 public class UserDetailsServiceImpl  implements UserDetailsService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
+
+    public UserDetailsServiceImpl(UsuarioRepository usuarioRepository, EmailService emailService, JwtTokenUtil jwtTokenUtil) {
+        this.usuarioRepository = usuarioRepository;
+        this.emailService = emailService;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

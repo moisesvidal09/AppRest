@@ -24,18 +24,20 @@ import javax.validation.Valid;
 @RestController
 public class JwtAuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
+    public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, UsuarioRepository usuarioRepository) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userDetailsService = userDetailsService;
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody @Valid UserRequestDto authenticationRequest) throws Exception {

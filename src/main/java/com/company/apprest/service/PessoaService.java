@@ -30,23 +30,32 @@ import java.util.stream.Collectors;
 @Service
 public class PessoaService implements IPessoaService{
 
-    @Autowired
-    private PessoaRepository pessoaRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PessoaRepository pessoaRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    private final RoleRepository roleRepository;
+
+
+    private final UsuarioRepository usuarioRepository;
+
+
+    private final UserDetailsServiceImpl userDetailsService;
+
+
+    private final JwtTokenUtil jwtTokenUtil;
+
+    public PessoaService(PessoaRepository pessoaRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, UsuarioRepository usuarioRepository, UserDetailsServiceImpl userDetailsService, JwtTokenUtil jwtTokenUtil) {
+        this.pessoaRepository = pessoaRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.userDetailsService = userDetailsService;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     private static Logger logger = LoggerFactory.getLogger(PessoaService.class);
 

@@ -29,26 +29,29 @@ import java.util.stream.Collectors;
 @Service
 public class PessoaAcaoService implements IPessoaAcaoService{
 
-    @Autowired
-    private PessoaAcaoRepository pessoaAcaoRepository;
+    private final PessoaAcaoRepository pessoaAcaoRepository;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private PessoaRepository pessoaRepository;
+    private final PessoaRepository pessoaRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
-    @Autowired
-    private PessoaService pessoaService;
+    private final PessoaService pessoaService;
+
+    public PessoaAcaoService(PessoaAcaoRepository pessoaAcaoRepository, JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, PessoaRepository pessoaRepository, UsuarioRepository usuarioRepository, ModelMapper mapper, PessoaService pessoaService) {
+        this.pessoaAcaoRepository = pessoaAcaoRepository;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userDetailsService = userDetailsService;
+        this.pessoaRepository = pessoaRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.mapper = mapper;
+        this.pessoaService = pessoaService;
+    }
 
     @Override
     @Cacheable("pessoa_acao")

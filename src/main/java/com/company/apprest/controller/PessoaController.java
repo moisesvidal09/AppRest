@@ -25,17 +25,20 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/pessoas/")
+@RequestMapping("api/v1/pessoas/")
 public class PessoaController implements IPessoaController{
 
-    @Autowired
-    private PessoaService pessoaService;
+    private final PessoaService pessoaService;
 
-    @Autowired
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
+
+    public PessoaController(PessoaService pessoaService, ModelMapper mapper, UserDetailsServiceImpl userDetailsService) {
+        this.pessoaService = pessoaService;
+        this.mapper = mapper;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     @PostMapping

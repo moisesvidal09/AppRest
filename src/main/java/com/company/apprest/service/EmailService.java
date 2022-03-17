@@ -14,11 +14,11 @@ import java.util.Date;
 @Service
 public class EmailService {
 
-    @Autowired
-    private EmailRepository emailRepository;
+    private final JavaMailSender javaMailSender;
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+    public EmailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
     public void sendEmail(Email email){
 

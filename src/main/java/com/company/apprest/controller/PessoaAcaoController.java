@@ -19,15 +19,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/pessoa/acao")
+@RequestMapping("api/v1/pessoa-acao")
 public class PessoaAcaoController implements IPessoaAcaoController{
 
-    @Autowired
-    private PessoaAcaoService pessoaAcaoService;
+    private final PessoaAcaoService pessoaAcaoService;
 
-    @Autowired
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
+    public PessoaAcaoController(PessoaAcaoService pessoaAcaoService, ModelMapper mapper) {
+        this.pessoaAcaoService = pessoaAcaoService;
+        this.mapper = mapper;
+    }
 
     @PostMapping
     @Override

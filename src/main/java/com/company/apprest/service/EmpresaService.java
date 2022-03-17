@@ -16,8 +16,11 @@ import java.util.List;
 @Service
 public class EmpresaService implements IEmpresaService{
 
-    @Autowired
-    private EmpresaRepository empresaRepository;
+    private final EmpresaRepository empresaRepository;
+
+    public EmpresaService(EmpresaRepository empresaRepository) {
+        this.empresaRepository = empresaRepository;
+    }
 
     @Override
     @Cacheable("empresas")

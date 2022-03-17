@@ -18,15 +18,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/empresas/")
+@RequestMapping("api/v1/empresas/")
 public class EmpresaController implements IEmpresaController{
 
+    private final EmpresaService empresaService;
 
-    @Autowired
-    private EmpresaService empresaService;
+    private final ModelMapper mapper;
 
-    @Autowired
-    private ModelMapper mapper;
+    public EmpresaController(EmpresaService empresaService, ModelMapper mapper) {
+        this.empresaService = empresaService;
+        this.mapper = mapper;
+    }
 
     @PostMapping
     @Override
