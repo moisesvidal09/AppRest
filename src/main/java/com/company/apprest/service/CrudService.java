@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface CrudService <T extends Object> {
+public interface CrudService <T> {
 
     List<T> list(Pageable pageable);
 
