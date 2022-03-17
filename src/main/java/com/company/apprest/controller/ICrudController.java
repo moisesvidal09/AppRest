@@ -5,9 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public interface ICrudController <T extends Object>{
+public interface ICrudController <T>{
 
-        ResponseEntity create(T entity) throws UsuarioException;
+        ResponseEntity create(T entity);
 
         ResponseEntity get(Long id);
 
