@@ -39,7 +39,7 @@ public class PessoaController implements IPessoaController{
 
     @Override
     @PostMapping
-    public ResponseEntity<PessoaResponseDto> create(@RequestBody @Valid PessoaRequestDto pessoaRequestDto) throws UsuarioException {
+    public ResponseEntity<PessoaResponseDto> create(@RequestBody @Valid PessoaRequestDto pessoaRequestDto) {
 
         Pessoa pessoa = pessoaService.save(mapper.map(pessoaRequestDto, Pessoa.class));
 

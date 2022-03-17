@@ -4,6 +4,7 @@ import com.company.apprest.entity.model.Pessoa;
 import com.company.apprest.entity.model.PessoaAcao;
 import com.company.apprest.entity.response.AcaoResponseDto;
 import com.company.apprest.entity.response.PessoaAcaoPrecoMedioResponseDto;
+import com.company.apprest.exception.AcoesNotFoundException;
 import com.company.apprest.repository.PessoaAcaoRepository;
 import com.company.apprest.repository.PessoaRepository;
 import com.company.apprest.repository.UsuarioRepository;
@@ -89,11 +90,11 @@ public class PessoaAcaoService implements IPessoaAcaoService{
     }
 
     @Override
-    public List<PessoaAcao> getAcoesByToken(String token){
+    public List<PessoaAcao> getAcoesByToken(String token) {
 
         Pessoa pessoa = pessoaService.getPessoaByToken(token);
 
-        return pessoaAcaoRepository.findByPessoa(pessoa);
+        return pessoaAcaoRepository.findByPessoa(pessoa).orElseThrow(() -> new AcoesNotFoundException("Ação não encontrada !!!"));
     }
 
     public PessoaAcaoPrecoMedioResponseDto getPrecoMedioAcao(String token, Long acao_id) throws Exception {
